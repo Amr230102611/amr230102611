@@ -6,6 +6,8 @@
             <li class="nav-item"><a class="nav-link" href="{{ url('/prime') }}">Prime Numbers</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('/multable') }}">Multiplication Table</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('/factorial') }}">Factorial</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/minitest') }}">MiniTest</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/transcript') }}">Transcript</a></li>
         </ul>
     </div>
 </nav>
