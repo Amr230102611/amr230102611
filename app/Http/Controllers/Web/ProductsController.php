@@ -47,28 +47,34 @@ class ProductsController extends Controller {
 		return view('products.edit', compact('product'));
 	}
 
-	public function save(Request $request, Product $product = null) {
+    public function save(Request $request, Product $product = null) {
 
-		$this->validate($request, [
-	        'code' => ['required', 'string', 'max:32'],
-	        'name' => ['required', 'string', 'max:128'],
-	        'model' => ['required', 'string', 'max:256'],
-	        'description' => ['required', 'string', 'max:1024'],
-	        'price' => ['required', 'numeric', 'min:0.01'],
+        $this->validate($request, [
+            'code' => ['required', 'string', 'max:32'],
+            'name' => ['required', 'string', 'max:128'],
+            'model' => ['required', 'string', 'max:256'],
+            'description' => ['required', 'string', 'max:1024'],
+            'price' => ['required', 'numeric', 'min:0.01'],
             'stock_quantity' => ['required', 'integer', 'min:0'],
-	    ]);
-
-		// Ensure user has permission to edit products
-        if($product->id && !auth()->user()->hasPermissionTo('edit_products')) abort(401);
-        // Ensure user has permission to add products
-        if(!$product->id && !auth()->user()->hasPermissionTo('add_products')) abort(401);
-
-		$product = $product??new Product();
-		$product->fill($request->all());
-		$product->save();
-
-		return redirect()->route('products_list');
-	}
+        ]);
+    
+        $product = $product ?? new Product();
+    
+        // Ensure user has permission to edit or add products
+        if ($product->exists && !auth()->user()->hasPermissionTo('edit_products')) {
+            abort(401);
+        }
+    
+        if (!$product->exists && !auth()->user()->hasPermissionTo('add_products')) {
+            abort(401);
+        }
+    
+        $product->fill($request->all());
+        $product->save();
+    
+        return redirect()->route('products_list');
+    }
+    
 
 	public function delete(Request $request, Product $product) {
 
